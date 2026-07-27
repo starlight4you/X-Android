@@ -35,6 +35,10 @@ import me.vkryl.android.AnimatorUtils;
 import me.vkryl.core.BitwiseUtils;
 
 public class FactorAnimator {
+  // InkGram: when true, all factor animations complete instantly (e-ink).
+  // Runtime-toggleable for debugging animation-dependent glitches.
+  public static volatile boolean FORCE_INSTANT = true;
+
   public interface Target {
     void onFactorChanged (int id, float factor, float fraction, FactorAnimator callee);
     default void onFactorChangeFinished (int id, float finalFactor, FactorAnimator callee) { }
@@ -196,6 +200,11 @@ public class FactorAnimator {
     final float factorDiff = toFactor - fromFactor;
 
     long duration = this.duration;
+
+    // InkGram: force all animations to complete instantly.
+    if (FORCE_INSTANT) {
+      duration = 0;
+    }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       if (!ValueAnimator.areAnimatorsEnabled()) {
