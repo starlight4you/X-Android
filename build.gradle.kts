@@ -1,6 +1,7 @@
 import tgx.gradle.flavorImplementation
 
 plugins {
+  id("java-toolchain-convention")
   id(libs.plugins.android.library.get().pluginId)
   id("tgx-module")
 }
@@ -16,4 +17,8 @@ dependencies {
 
 android {
   namespace = "me.vkryl.android"
+
+  lint {
+    disable += "ObsoleteSdkInt"
+  }
 }
